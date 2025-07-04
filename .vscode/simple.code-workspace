@@ -1,0 +1,49 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../meta-arm"
+		},
+		{
+			"path": "../openembedded-core"
+		}
+	],
+	"settings": {
+		"files.watcherExclude": {
+        "**/build": true
+		},
+		"search.exclude": {
+			"**/build": true
+		},
+		"C_Cpp.files.exclude": {
+			"**/build": true
+		},
+		"python.analysis.exclude": [
+			"**/build"
+		],
+		"git.repositoryScanIgnoredFolders": [
+			"**/build"
+		],
+		"bitbake.pathToBuildFolder": "${workspaceFolder}/build",
+		"bitbake.pathToEnvScript": "${workspaceFolder}/openembedded-core/oe-init-build-env",
+		"bitbake.pathToBitbakeFolder": "${workspaceFolder}/bitbake",
+		"files.associations": {
+			"*.conf": "bitbake",
+			"*.inc": "bitbake",
+			"log.*": "log",
+			"run.*": "python"
+		},
+		"python.autoComplete.extraPaths": [
+			"${workspaceFolder}/bitbake/lib",
+			"${workspaceFolder}/openembedded-core/meta/lib",
+			"${workspaceFolder}/meta/lib"
+		],
+		"python.analysis.extraPaths": [
+			"${workspaceFolder}/bitbake/lib",
+			"${workspaceFolder}/openembedded-core/meta/lib",
+			"${workspaceFolder}/meta/lib"
+		]
+	}
+}
