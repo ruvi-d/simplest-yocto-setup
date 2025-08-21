@@ -1,0 +1,13 @@
+services:
+  crops-yocto:
+    image: crops/yocto:ubuntu-22.04-base
+    command: sleep infinity
+    volumes:
+      # Mount working dir
+      - .:/workspaces/simplest-yocto-setup
+      # Mount shared caches dir
+      - ${HOME}/yocto-caches:/workspaces/simplest-yocto-setup/caches
+      # Mount git SSH credentials
+      - ${HOME}/.ssh:/home/yoctouser/.ssh:ro
+      # Mount shell history files
+      - ${HOME}/.zsh_history:/home/yoctouser/.zsh_history

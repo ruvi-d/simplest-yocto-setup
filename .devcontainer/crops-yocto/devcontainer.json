@@ -1,0 +1,74 @@
+{
+	"name": "crops-yocto",
+	"dockerComposeFile": "../../docker-compose.yml",
+    "service": "crops-yocto",
+	"workspaceFolder": "/workspaces/simplest-yocto-setup",
+
+	"features": {
+		"ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {}
+	},
+
+	"customizations": {
+        "vscode": {
+            "extensions": [
+				"yocto-project.yocto-bitbake",
+				"streetsidesoftware.code-spell-checker",
+				"mads-hartmann.bash-ide-vscode",
+				"ms-python.vscode-pylance",
+				"ms-python.python",
+				"ms-python.debugpy",
+				"ms-vscode.makefile-tools",
+				"ms-vscode.cpptools-extension-pack",
+				"wickscc.openembedded-kickstart",
+				"plorefice.devicetree"
+			],
+            "settings": {
+                "files.watcherExclude": {
+					"**/build*": true
+				},
+				"search.exclude": {
+					"**/build*": true
+				},
+				"C_Cpp.files.exclude": {
+					"**/build*": true
+				},
+				"python.analysis.exclude": [
+					"**/build*"
+				],
+				"git.repositoryScanIgnoredFolders": [
+					"**/build*"
+				],
+				"bitbake.buildConfigurations": [
+					{
+						"name": "dogbonedark",
+						"pathToBuildFolder": "${workspaceFolder}/build"
+					},
+					{
+						"name": "stompduck",
+						"pathToBuildFolder": "${workspaceFolder}/build-st"
+					}
+				],
+				"bitbake.pathToEnvScript": "${workspaceFolder}/openembedded-core/oe-init-build-env",
+				"bitbake.pathToBitbakeFolder": "${workspaceFolder}/bitbake",
+				"bitbake.sdkImage": "kiss-image",
+				"terminal.integrated.defaultProfile.linux": "zsh",
+				"files.associations": {
+					"*.conf": "bitbake",
+					"*.inc": "bitbake",
+					"log.*": "log",
+					"run.*": "python"
+				},
+				"python.autoComplete.extraPaths": [
+					"${workspaceFolder}/bitbake/lib",
+					"${workspaceFolder}/openembedded-core/meta/lib",
+					"${workspaceFolder}/meta/lib"
+				],
+				"python.analysis.extraPaths": [
+					"${workspaceFolder}/bitbake/lib",
+					"${workspaceFolder}/openembedded-core/meta/lib",
+					"${workspaceFolder}/meta/lib"
+				]
+            }
+        }
+    }
+}
