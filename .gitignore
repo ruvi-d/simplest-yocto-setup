@@ -1,4 +1,5 @@
 bitbake/
 openembedded-core/
-build/
+build*/
 meta-arm/
+caches/
