@@ -1,0 +1,31 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "meta-arm"
+		},
+		{
+			"path": "openembedded-core"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.conf": "bitbake",
+			"*.inc": "bitbake",
+			"log.*": "log",
+			"run.*": "python"
+		},
+		"python.autoComplete.extraPaths": [
+			"${workspaceFolder}/bitbake/lib",
+			"${workspaceFolder}/openembedded-core/meta/lib",
+			"${workspaceFolder}/meta/lib"
+		],
+		"python.analysis.extraPaths": [
+			"${workspaceFolder}/bitbake/lib",
+			"${workspaceFolder}/openembedded-core/meta/lib",
+			"${workspaceFolder}/meta/lib"
+		]
+	}
+}
