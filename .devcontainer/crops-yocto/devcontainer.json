@@ -46,6 +46,10 @@
 					{
 						"name": "stompduck",
 						"pathToBuildFolder": "${workspaceFolder}/build-st"
+					},
+					{
+						"name": "qemuarm",
+						"pathToBuildFolder": "${workspaceFolder}/build-qemuarm"
 					}
 				],
 				"bitbake.pathToEnvScript": "${workspaceFolder}/openembedded-core/oe-init-build-env",
