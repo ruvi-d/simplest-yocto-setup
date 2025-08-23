@@ -5,8 +5,12 @@
 	"workspaceFolder": "/workspaces/simplest-yocto-setup",
 
 	"features": {
-		"ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {}
+		"ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {
+			"plugins" : "git zsh-autosuggestions"
+		}
 	},
+
+	"postCreateCommand": "git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions",
 
 	"customizations": {
         "vscode": {
