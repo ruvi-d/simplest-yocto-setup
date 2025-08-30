@@ -1,0 +1,8 @@
+header:
+  version: 14
+
+local_conf_header:
+  site-local: |
+    BB_NUMBER_THREADS = "8"
+    DL_DIR = "/workspaces/caches/downloads/"
+    SSTATE_DIR = "/workspaces/caches/sstate-cache"

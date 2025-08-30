@@ -1,5 +1,7 @@
 header:
   version: 11
+  includes:
+    - kas-devcontainer-configuration.yml
 
 machine: dogbonedark
 distro: kiss

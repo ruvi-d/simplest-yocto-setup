@@ -6,7 +6,7 @@ services:
       # Mount working dir
       - .:/workspaces/simplest-yocto-setup
       # Mount shared caches dir
-      - ${HOME}/yocto-caches:/workspaces/simplest-yocto-setup/caches
+      - ${HOME}/yocto-caches:/workspaces/caches
       # Mount SSH credentials for git access
       - ${HOME}/.ssh:/home/yoctouser/.ssh:ro
       # Mount shell history files
