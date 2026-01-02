@@ -1,20 +1,17 @@
 {
 	"name": "crops-yocto",
 	"dockerComposeFile": "../docker-compose.yml",
-    "service": "crops-yocto",
+	"service": "crops-yocto",
 	"workspaceFolder": "/workspaces/simplest-yocto-setup",
-
 	"features": {
 		"ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {
-			"plugins" : "git zsh-autosuggestions"
+			"plugins": "git zsh-autosuggestions"
 		}
 	},
-
 	"postCreateCommand": "git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions",
-
 	"customizations": {
-        "vscode": {
-            "extensions": [
+		"vscode": {
+			"extensions": [
 				"yocto-project.yocto-bitbake",
 				"streetsidesoftware.code-spell-checker",
 				"mads-hartmann.bash-ide-vscode",
@@ -26,8 +23,8 @@
 				"wickscc.openembedded-kickstart",
 				"plorefice.devicetree"
 			],
-            "settings": {
-                "files.watcherExclude": {
+			"settings": {
+				"files.watcherExclude": {
 					"**/build*": true
 				},
 				"search.exclude": {
@@ -76,7 +73,7 @@
 					"${workspaceFolder}/openembedded-core/meta/lib",
 					"${workspaceFolder}/meta/lib"
 				]
-            }
-        }
-    }
+			}
+		}
+	}
 }
