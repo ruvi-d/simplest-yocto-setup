@@ -1,6 +1,6 @@
 services:
   crops-yocto:
-    image: crops/yocto:ubuntu-22.04-base
+    image: crops/yocto:ubuntu-24.04-base
     command: sleep infinity
     volumes:
       # Mount working dir
