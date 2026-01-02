@@ -3,12 +3,20 @@
 	"dockerComposeFile": "../docker-compose.yml",
 	"service": "crops-yocto",
 	"workspaceFolder": "/workspaces/simplest-yocto-setup",
+	// Initialize the host machine by creating a cache directory
+	"initializeCommand": {
+		"createCacheDir": "mkdir -p ~/yocto-caches"
+	},
+	// Enable ZSH devcontainer feature and add zsh-autosuggestions plugin
 	"features": {
 		"ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {
 			"plugins": "git zsh-autosuggestions"
 		}
 	},
+	// Install zsh-autosuggestions plugin
 	"postCreateCommand": "git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions",
+	// Initialize the 3 build directories required for the Bitbake plugin's build configurations
+	"postStartCommand": "test -d build || kas checkout .config.yaml:kas-devcontainer-configuration.yml; test -d build-st || KAS_BUILD_DIR=build-st KAS_MACHINE=stompduck kas checkout .config.yaml:kas-devcontainer-configuration.yml; test -d build-qemuarm || KAS_BUILD_DIR=build-qemuarm KAS_MACHINE=qemuarm kas checkout .config.yaml:kas-devcontainer-configuration.yml",
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -21,9 +29,16 @@
 				"ms-vscode.makefile-tools",
 				"ms-vscode.cpptools-extension-pack",
 				"wickscc.openembedded-kickstart",
-				"plorefice.devicetree"
+				"plorefice.devicetree",
+				"moshfeu.diff-merge",
+				"ms-python.black-formatter",
+				"kweihmann.oelint-vscode"
 			],
 			"settings": {
+				// Disable auto save to limit the times Bitbake plugin spins up
+				"files.autoSave": "off",
+				// Enable format on manual save. This is format known types like .py files
+				"editor.formatOnSave": true,
 				"files.watcherExclude": {
 					"**/build*": true
 				},
@@ -72,8 +87,10 @@
 					"${workspaceFolder}/bitbake/lib",
 					"${workspaceFolder}/openembedded-core/meta/lib",
 					"${workspaceFolder}/meta/lib"
-				]
-			}
+				],
+				// Configure Bitbake linter plugin
+				"oelint-vscode.run.fix": true,
+				"oelint-vscode.run.mode": "all"
 		}
 	}
 }
