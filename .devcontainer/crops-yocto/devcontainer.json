@@ -15,8 +15,8 @@
 	},
 	// Install zsh-autosuggestions plugin
 	"postCreateCommand": "git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions",
-	// Initialize the 3 build directories required for the Bitbake plugin's build configurations
-	"postStartCommand": "test -d build || kas checkout .config.yaml:kas-devcontainer-configuration.yml; test -d build-st || KAS_BUILD_DIR=build-st KAS_MACHINE=stompduck kas checkout .config.yaml:kas-devcontainer-configuration.yml; test -d build-qemuarm || KAS_BUILD_DIR=build-qemuarm KAS_MACHINE=qemuarm kas checkout .config.yaml:kas-devcontainer-configuration.yml",
+	// Initialize the 3 build directories required for the Bitbake plugin's build configurations - uncomment this if you have kas in your devcontainer
+	// "postStartCommand": "test -d build || kas checkout .config.yaml:kas-devcontainer-configuration.yml; test -d build-st || KAS_BUILD_DIR=build-st KAS_MACHINE=stompduck kas checkout .config.yaml:kas-devcontainer-configuration.yml; test -d build-qemuarm || KAS_BUILD_DIR=build-qemuarm KAS_MACHINE=qemuarm kas checkout .config.yaml:kas-devcontainer-configuration.yml",
 	"customizations": {
 		"vscode": {
 			"extensions": [
