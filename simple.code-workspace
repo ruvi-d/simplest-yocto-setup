@@ -11,6 +11,9 @@
 		}
 	],
 	"settings": {
+		"git.ignoredRepositories": [
+			"/workspaces/simplest-yocto-setup/bitbake"
+		],
 		"files.associations": {
 			"*.conf": "bitbake",
 			"*.inc": "bitbake",
@@ -26,6 +29,19 @@
 			"${workspaceFolder}/bitbake/lib",
 			"${workspaceFolder}/openembedded-core/meta/lib",
 			"${workspaceFolder}/meta/lib"
-		]
+		],
+		"[python]": {
+			"diffEditor.ignoreTrimWhitespace": false,
+			"editor.defaultColorDecorators": "never",
+			"editor.formatOnType": true,
+			"editor.wordBasedSuggestions": "off",
+			"files.trimTrailingWhitespace": false
+		},
+		"[shellscript]": {
+			"files.eol": "\n",
+			"editor.defaultColorDecorators": "never",
+			"files.trimTrailingWhitespace": false
+		},
+		"task.saveBeforeRun": "always"
 	}
 }
