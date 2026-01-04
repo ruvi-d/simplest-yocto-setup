@@ -1,20 +1,24 @@
 {
 	"name": "crops-yocto",
 	"dockerComposeFile": "../../docker-compose.yml",
-    "service": "crops-yocto",
+	"service": "crops-yocto",
 	"workspaceFolder": "/workspaces/simplest-yocto-setup",
-
+	// Initialize the host machine
+	"initializeCommand": {
+		"createCacheDir": "mkdir -p ~/yocto-caches"
+	},
+	// Add ZSH support
 	"features": {
 		"ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {
-			"plugins" : "git zsh-autosuggestions"
+			"plugins": "git zsh-autosuggestions"
 		}
 	},
-
 	"postCreateCommand": "git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions",
-
+	// Create build folder with kas checkout
+	"postStartCommand": "test -d build || kas checkout .config.yaml:kas-devcontainer-configuration.yml; test -d build-st || KAS_BUILD_DIR=build-st KAS_MACHINE=stompduck kas checkout .config.yaml:kas-devcontainer-configuration.yml; test -d build-qemuarm || KAS_BUILD_DIR=build-qemuarm KAS_MACHINE=qemuarm kas checkout .config.yaml:kas-devcontainer-configuration.yml",
 	"customizations": {
-        "vscode": {
-            "extensions": [
+		"vscode": {
+			"extensions": [
 				"yocto-project.yocto-bitbake",
 				"streetsidesoftware.code-spell-checker",
 				"mads-hartmann.bash-ide-vscode",
@@ -24,10 +28,17 @@
 				"ms-vscode.makefile-tools",
 				"ms-vscode.cpptools-extension-pack",
 				"wickscc.openembedded-kickstart",
-				"plorefice.devicetree"
+				"plorefice.devicetree",
+				"moshfeu.diff-merge",
+				"ms-python.black-formatter",
+				"kweihmann.oelint-vscode"
 			],
-            "settings": {
-                "files.watcherExclude": {
+			"settings": {
+				// Disable auto save to limit the times Bitbake plugin spins up
+				"files.autoSave": "off",
+				// Enable format on manual save. This is format known types like .py files
+				"editor.formatOnSave": true,
+				"files.watcherExclude": {
 					"**/build*": true
 				},
 				"search.exclude": {
@@ -75,8 +86,10 @@
 					"${workspaceFolder}/bitbake/lib",
 					"${workspaceFolder}/openembedded-core/meta/lib",
 					"${workspaceFolder}/meta/lib"
-				]
-            }
-        }
-    }
+				],
+				"oelint-vscode.run.fix": true,
+				"oelint-vscode.run.mode": "all"
+			}
+		}
+	}
 }
