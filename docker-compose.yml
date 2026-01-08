@@ -2,6 +2,9 @@ services:
   crops-yocto:
     image: ruvid/yocto-development:ubuntu-22.04
     command: sleep infinity
+    environment:
+      # Pass Bitbake linter config location
+      - OELINT_CONFIG=/workspaces/simplest-yocto-setup/.oelint.cfg
     volumes:
       # Mount working dir
       - .:/workspaces/simplest-yocto-setup
