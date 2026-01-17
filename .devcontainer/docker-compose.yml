@@ -7,7 +7,7 @@ services:
       - OELINT_CONFIG=/workspaces/simplest-yocto-setup/.oelint.cfg
     volumes:
       # Mount working dir
-      - .:/workspaces/simplest-yocto-setup
+      - ..:/workspaces/simplest-yocto-setup
       # Mount shared caches dir
       - ${HOME}/yocto-caches:/workspaces/caches
       # Mount SSH credentials for git access
