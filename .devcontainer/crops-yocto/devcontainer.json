@@ -65,6 +65,10 @@
 					{
 						"name": "qemuarm",
 						"pathToBuildFolder": "${workspaceFolder}/build-qemuarm"
+					},
+					{
+						"name": "ti",
+						"pathToBuildFolder": "${workspaceFolder}/build-ti"
 					}
 				],
 				"bitbake.pathToEnvScript": "${workspaceFolder}/sources/openembedded-core/oe-init-build-env",

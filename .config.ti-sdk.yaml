@@ -1,0 +1,52 @@
+header:
+  version: 11
+
+machine: beaglebone
+distro: kiss
+target:
+  - kiss-image
+
+repos:
+  bitbake:
+    url: "https://git.openembedded.org/bitbake"
+    branch: "2.8"
+    path: sources/bitbake
+    layers:
+      .: disabled
+
+  openembedded-core:
+    url: "https://git.openembedded.org/openembedded-core"
+    branch: scarthgap
+    path: sources/openembedded-core
+    layers:
+      meta:
+
+  meta-arm:
+    url: "git://git.yoctoproject.org/meta-arm"
+    branch: scarthgap
+    path: sources/meta-arm
+    layers:
+      meta-arm-toolchain:
+      meta-arm:
+
+  meta-ti:
+    url: "https://git.yoctoproject.org/git/meta-ti"
+    commit: f483464c72055cdcb81853e06afc89719e73073f
+    path: sources/meta-ti
+    layers:
+      meta-beagle:
+      meta-ti-bsp:
+
+  meta-kiss:
+    layers:
+      meta-kiss:
+
+local_conf_header:
+  meta-kiss: |
+    # Some useful lines you may want to copy to your site.conf for development
+    # INHERIT += "rm_work"
+    # EXTRA_IMAGE_FEATURES += "empty-root-password \
+    #                          allow-empty-password \
+    #                          allow-root-login \
+    #                          "
+    # LICENSE_FLAGS_ACCEPTED += "NXP_EULA_v57 NXP_EULA_v58"
