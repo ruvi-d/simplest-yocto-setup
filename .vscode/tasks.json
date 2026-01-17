@@ -1,0 +1,13 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "kas: checkout",
+            "type": "shell",
+            "command": "bash  ${workspaceFolder}/.devcontainer/setup-builds.sh",
+            "problemMatcher": [
+                "$bitbake-task-error"
+            ]
+        }
+    ]
+}
