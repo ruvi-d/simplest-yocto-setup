@@ -31,7 +31,7 @@ repos:
 
   meta-ti:
     url: "https://git.yoctoproject.org/git/meta-ti"
-    commit: f483464c72055cdcb81853e06afc89719e73073f
+    tag: 11.02.05
     path: sources/meta-ti
     layers:
       meta-beagle:
