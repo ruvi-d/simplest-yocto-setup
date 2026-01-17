@@ -10,18 +10,21 @@ repos:
   bitbake:
     url: "https://git.openembedded.org/bitbake"
     branch: "2.8"
+    path: sources/bitbake
     layers:
       .: disabled
 
   openembedded-core:
     url: "https://git.openembedded.org/openembedded-core"
     branch: scarthgap
+    path: sources/openembedded-core
     layers:
       meta:
 
   meta-arm:
     url: "git://git.yoctoproject.org/meta-arm"
     branch: scarthgap
+    path: sources/meta-arm
     layers:
       meta-arm-toolchain:
       meta-arm:

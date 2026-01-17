@@ -67,8 +67,8 @@
 						"pathToBuildFolder": "${workspaceFolder}/build-qemuarm"
 					}
 				],
-				"bitbake.pathToEnvScript": "${workspaceFolder}/openembedded-core/oe-init-build-env",
-				"bitbake.pathToBitbakeFolder": "${workspaceFolder}/bitbake",
+				"bitbake.pathToEnvScript": "${workspaceFolder}/sources/openembedded-core/oe-init-build-env",
+				"bitbake.pathToBitbakeFolder": "${workspaceFolder}/sources/bitbake",
 				"bitbake.sdkImage": "kiss-image",
 				"terminal.integrated.defaultProfile.linux": "zsh",
 				"files.associations": {
@@ -78,14 +78,14 @@
 					"run.*": "python"
 				},
 				"python.autoComplete.extraPaths": [
-					"${workspaceFolder}/bitbake/lib",
-					"${workspaceFolder}/openembedded-core/meta/lib",
-					"${workspaceFolder}/meta/lib"
+					"${workspaceFolder}/sources/bitbake/lib",
+					"${workspaceFolder}/sources/openembedded-core/meta/lib",
+					"${workspaceFolder}/sources/meta/lib"
 				],
 				"python.analysis.extraPaths": [
-					"${workspaceFolder}/bitbake/lib",
-					"${workspaceFolder}/openembedded-core/meta/lib",
-					"${workspaceFolder}/meta/lib"
+					"${workspaceFolder}/sources/bitbake/lib",
+					"${workspaceFolder}/sources/openembedded-core/meta/lib",
+					"${workspaceFolder}/sources/meta/lib"
 				],
 				"oelint-vscode.run.fix": true,
 				"oelint-vscode.run.mode": "all"
