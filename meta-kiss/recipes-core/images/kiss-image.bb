@@ -4,8 +4,10 @@
 
 SUMMARY = "A simple, minimal image"
 
-IMAGE_INSTALL = "packagegroup-core-boot dropbear sl"
+IMAGE_INSTALL = "packagegroup-core-boot dropbear khello"
 
-IMAGE_LINGUAS = " "
+IMAGE_LINGUAS = ""
+
+IMAGE_FEATURES += "debug-tweaks"
 
 inherit core-image
