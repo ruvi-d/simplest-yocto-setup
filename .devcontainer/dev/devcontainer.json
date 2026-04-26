@@ -1,0 +1,106 @@
+{
+	"name": "CROPS 22.04",
+	"dockerComposeFile": "compose.yaml",
+	"service": "yocto-dev",
+	"workspaceFolder": "/workspaces/simplest-yocto-setup",
+	// Initialize the host machine
+	"initializeCommand": {
+		"createCacheDir": "mkdir -p ~/yocto-caches"
+	},
+	// Add ZSH support
+	"features": {
+		"ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {
+			"plugins": "git zsh-autosuggestions"
+		}
+	},
+	"postCreateCommand": "git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions",
+	// Create build folder with kas checkout
+	"postAttachCommand": "test -d build || bash .devcontainer/dev/setup-builds.sh",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"yocto-project.yocto-bitbake",
+				"streetsidesoftware.code-spell-checker",
+				"mads-hartmann.bash-ide-vscode",
+				"ms-python.vscode-pylance",
+				"ms-python.python",
+				"ms-python.debugpy",
+				"ms-vscode.makefile-tools",
+				"ms-vscode.cpptools-extension-pack",
+				"wickscc.openembedded-kickstart",
+				"plorefice.devicetree",
+				"moshfeu.diff-merge",
+				"ms-python.black-formatter",
+				"kweihmann.oelint-vscode"
+			],
+			"settings": {
+				// Disable auto save to limit the times Bitbake plugin spins up
+				"files.autoSave": "off",
+				// Enable format on manual save. This is format known types like .py files
+				"editor.formatOnSave": true,
+				"files.watcherExclude": {
+					"**/build*": true,
+					"**/bitbake/**": true,
+					"**/openembedded-core/**": true,
+					"**/meta-arm/**": true,
+					"**/.git/objects/**": true,
+					"**/.git/subtree-cache/**": true,
+					"**/.git/refs/**": true,
+					"**/.git/logs/**": true
+				},
+				"search.exclude": {
+					"**/build*": true
+				},
+				"C_Cpp.files.exclude": {
+					"**/build*": true
+				},
+				"python.analysis.exclude": [
+					"**/build*"
+				],
+				"git.repositoryScanIgnoredFolders": [
+					"**/build*"
+				],
+				"bitbake.buildConfigurations": [
+					{
+						"name": "dogbonedark",
+						"pathToBuildFolder": "${workspaceFolder}/build"
+					},
+					{
+						"name": "stompduck",
+						"pathToBuildFolder": "${workspaceFolder}/build-st"
+					},
+					{
+						"name": "qemuarm",
+						"pathToBuildFolder": "${workspaceFolder}/build-qemuarm"
+					},
+					{
+						"name": "freiheit93",
+						"pathToBuildFolder": "${workspaceFolder}/build-nxp"
+					}
+				],
+				"bitbake.pathToEnvScript": "${workspaceFolder}/openembedded-core/oe-init-build-env",
+				"bitbake.pathToBitbakeFolder": "${workspaceFolder}/bitbake",
+				"bitbake.sdkImage": "kiss-image",
+				"terminal.integrated.defaultProfile.linux": "zsh",
+				"files.associations": {
+					"*.conf": "bitbake",
+					"*.inc": "bitbake",
+					"log.*": "log",
+					"run.*": "python"
+				},
+				"python.autoComplete.extraPaths": [
+					"${workspaceFolder}/bitbake/lib",
+					"${workspaceFolder}/openembedded-core/meta/lib",
+					"${workspaceFolder}/meta/lib"
+				],
+				"python.analysis.extraPaths": [
+					"${workspaceFolder}/bitbake/lib",
+					"${workspaceFolder}/openembedded-core/meta/lib",
+					"${workspaceFolder}/meta/lib"
+				],
+				"oelint-vscode.run.fix": true,
+				"oelint-vscode.run.mode": "all"
+			}
+		}
+	}
+}

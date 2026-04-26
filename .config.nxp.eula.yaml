@@ -1,0 +1,6 @@
+header:
+  version: 14
+
+local_conf_header:
+  nxp-eula: |
+    LICENSE_FLAGS_ACCEPTED += "NXP_EULA_v57 NXP_EULA_v58"

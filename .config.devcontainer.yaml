@@ -1,0 +1,7 @@
+header:
+  version: 14
+
+local_conf_header:
+  site-local: |
+    DL_DIR = "/workspaces/caches/downloads/"
+    SSTATE_DIR = "/workspaces/caches/sstate-cache"
