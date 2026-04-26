@@ -12,7 +12,11 @@
 require kiss-image.bb
 
 SUMMARY = "kiss-image with runtime sanity tests enabled"
+DESCRIPTION = "kiss-image variant that inherits the OE testimage class to run \
+               runtime sanity tests under QEMU"
+LICENSE = "MIT"
 
+# nooelint: oelint.var.badimagefeature.debug-tweaks
 IMAGE_FEATURES += "debug-tweaks"
 
 IMAGE_CLASSES += "testimage"

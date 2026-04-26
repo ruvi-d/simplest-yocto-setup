@@ -56,6 +56,30 @@ above. Available test cases live under
 `openembedded-core/meta/lib/oeqa/runtime/cases/`; add module names to
 `TEST_SUITES` in the recipe to enable more.
 
+## Linting recipes
+
+After modifying any recipe (`.bb` / `.bbappend` / `.inc`) under `meta-kiss/`,
+run `oelint-adv` on the changed file and resolve every finding before
+considering the task done:
+
+```bash
+oelint-adv meta-kiss/path/to/recipe.bb
+```
+
+For each finding:
+
+- Prefer fixing the underlying issue (e.g. add the missing `LICENSE`
+  / `DESCRIPTION`, switch a hard `=` to `?=` in a `require`-d file to
+  avoid `oelint.var.override`, etc.).
+- If the finding is a deliberate, justified deviation (e.g.
+  `IMAGE_FEATURES += "debug-tweaks"` in the testimage recipe), suppress
+  it inline with a `# nooelint: <rule.id>` comment placed on the line
+  *immediately above* the offending line. Do not suppress findings just
+  to silence them — keep suppressions narrow and explained by nearby
+  comments.
+
+A clean `oelint-adv` run (no output, exit 0) is the bar for "done".
+
 ## Architecture and layer structure
 
 `meta-kiss/` is the only custom layer. Its structure follows standard OE conventions:

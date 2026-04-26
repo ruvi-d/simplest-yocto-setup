@@ -28,7 +28,8 @@
       "Bash(stat:*)",
       "Bash(readlink:*)",
       "Bash(realpath:*)",
-      "Bash(diff:*)"
+      "Bash(diff:*)",
+      "Bash(oelint-adv:*)"
     ]
   }
 }
