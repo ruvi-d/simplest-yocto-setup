@@ -175,6 +175,40 @@ ls -l tmp-glibc/deploy/images/dogbonedark/
 sudo bmaptool copy tmp-glibc/deploy/images/dogbonedark/kiss-image-dogbonedark.wic /dev/XYZ
 ```
 
+## How do I use it with VS Code
+
+This fork ships a [Dev Container](https://containers.dev/) under
+`.devcontainer/dev/` so you can build any of the supported machines
+without installing kas, bitbake or a Yocto-friendly toolchain on your
+host.
+
+Prerequisites: VS Code with the **Dev Containers** extension, and Docker
+(or Podman with Compose) running locally.
+
+1. Clone this repository and open the folder in VS Code.
+2. Run **Dev Containers: Reopen in Container** from the command palette.
+   The first build pulls `crops/yocto:ubuntu-22.04-base` and installs
+   `kas` and `oelint-adv`.
+3. On first attach, `.devcontainer/dev/setup-builds.sh` runs
+   `kas checkout` for every machine and pre-creates the four build
+   folders described in `CLAUDE.md`:
+   `build/` (dogbonedark), `build-st/` (stompduck),
+   `build-qemuarm/` (QEMU) and `build-nxp/` (freiheit93). A shared
+   downloads/sstate cache is mounted from `~/yocto-caches` on the host.
+4. Use the bundled **Yocto BitBake** extension to build. The four
+   machines are pre-registered as build configurations in
+   `devcontainer.json`. Select the target machine from the **BitBake
+   configuration selector** in the bottom-right of the status bar, then
+   open a **BitBake terminal** from the terminal pane. In that terminal the
+   environment is pre-sourced, so you can run bitbake directly:
+
+   ```bash
+   bitbake kiss-image
+   ```
+
+Recipes are linted on save by the **oelint** extension, and the
+container also includes Claude Code for AI-assisted edits.
+
 # That's all!
 
 That's all! Have a look around the code to know about the implementation
