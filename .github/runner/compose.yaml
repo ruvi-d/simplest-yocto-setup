@@ -1,0 +1,15 @@
+services:
+  yocto-runner:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      # Shared sstate / downloads cache — same path the devcontainer uses,
+      # so a CI build seeds the cache for a later local build (and vice versa).
+      - ${HOME}/yocto-caches:/workspaces/caches
+      # Runner work dir — bind-mounted to a CI-only host path so it's
+      # transparent (you can `du -sh` it, manually nuke it) and *not* the
+      # project working directory, so CI jobs cannot collide with the host's
+      # source tree or build dirs. The build.yml workflow cleans this dir
+      # at the end of every job.
+      - ${HOME}/yocto-runner-work:/home/yoctouser/runner/_work

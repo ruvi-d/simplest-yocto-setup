@@ -1,0 +1,90 @@
+name: build
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  build-machine:
+    name: build kiss-image (${{ matrix.machine }})
+    runs-on: [self-hosted, yocto-build]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - machine: dogbonedark
+            build_dir: build
+            kas_overlays: .config.yaml:.config.devcontainer.yaml
+          - machine: stompduck
+            build_dir: build-st
+            kas_overlays: .config.yaml:.config.devcontainer.yaml
+          - machine: freiheit93
+            build_dir: build-nxp
+            kas_overlays: .config.yaml:.config.devcontainer.yaml:.config.nxp.eula.yaml
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: kas checkout
+        env:
+          KAS_BUILD_DIR: ${{ matrix.build_dir }}
+          KAS_MACHINE: ${{ matrix.machine }}
+        run: kas checkout "${{ matrix.kas_overlays }}"
+
+      - name: bitbake kiss-image
+        run: |
+          set -e
+          source openembedded-core/oe-init-build-env "${{ matrix.build_dir }}"
+          bitbake kiss-image
+
+      - name: Clean workspace artifacts
+        if: always()
+        run: |
+          rm -rf bitbake openembedded-core meta-arm
+          rm -rf build build-st build-qemuarm build-nxp
+
+  test-qemuarm:
+    name: build + testimage (qemuarm)
+    runs-on: [self-hosted, yocto-build]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: kas checkout
+        env:
+          KAS_BUILD_DIR: build-qemuarm
+          KAS_MACHINE: qemuarm
+        run: kas checkout .config.yaml:.config.devcontainer.yaml
+
+      - name: bitbake kiss-image
+        run: |
+          set -e
+          source openembedded-core/oe-init-build-env build-qemuarm
+          bitbake kiss-image
+
+      - name: bitbake kiss-image-testing
+        run: |
+          set -e
+          source openembedded-core/oe-init-build-env build-qemuarm
+          bitbake kiss-image-testing
+
+      - name: bitbake kiss-image-testing -c testimage
+        id: testimage
+        run: |
+          set -e
+          source openembedded-core/oe-init-build-env build-qemuarm
+          bitbake kiss-image-testing -c testimage
+
+      - name: Upload testimage logs on failure
+        if: failure() && steps.testimage.conclusion == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: qemuarm-testimage-logs
+          path: build-qemuarm/tmp/log/oeqa/
+          if-no-files-found: ignore
+
+      - name: Clean workspace artifacts
+        if: always()
+        run: |
+          rm -rf bitbake openembedded-core meta-arm
+          rm -rf build build-st build-qemuarm build-nxp
