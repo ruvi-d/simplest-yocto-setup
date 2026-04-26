@@ -17,12 +17,14 @@ Each machine has a dedicated pre-configured build directory. Source `oe-init-bui
 | `dogbonedark` | BeagleBone Black | `build/` |
 | `stompduck` | STM32MP157A-DK1 | `build-st/` |
 | QEMU ARM | — | `build-qemuarm/` |
+| `freiheit93` | FRDM i.MX93 | `build-nxp/` |
 
 ```bash
 # Initialize environment for a machine (run from repo root)
 source openembedded-core/oe-init-build-env build        # dogbonedark
 source openembedded-core/oe-init-build-env build-st     # stompduck
 source openembedded-core/oe-init-build-env build-qemuarm
+source openembedded-core/oe-init-build-env build-nxp   # freiheit93
 
 # Build the image
 bitbake kiss-image
