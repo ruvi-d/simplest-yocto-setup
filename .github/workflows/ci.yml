@@ -1,0 +1,145 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    name: oelint-adv (changed recipes)
+    # Lint runs on pull requests only; on push to main the merge has
+    # already happened and downstream builds run unconditionally.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: List changed recipe files under meta-kiss/
+        id: changed
+        run: |
+          base="origin/${{ github.base_ref }}"
+          files=$(git diff --name-only --diff-filter=ACMR "$base"...HEAD -- \
+            'meta-kiss/**/*.bb' 'meta-kiss/**/*.bbappend' 'meta-kiss/**/*.inc')
+          if [ -z "$files" ]; then
+            echo "No recipe files changed under meta-kiss/."
+            echo "files=" >> "$GITHUB_OUTPUT"
+          else
+            echo "Changed recipes:"
+            printf '  %s\n' $files
+            {
+              echo 'files<<EOF'
+              echo "$files"
+              echo 'EOF'
+            } >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install oelint-adv
+        if: steps.changed.outputs.files != ''
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends pipx
+          pipx ensurepath
+          pipx install oelint-adv
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Run oelint-adv
+        if: steps.changed.outputs.files != ''
+        env:
+          OELINT_CONFIG: ${{ github.workspace }}/.oelint.cfg
+        run: |
+          # `.oelint.cfg` already sets `hide = info` and `quiet = True`,
+          # so any output is a warning or error. oelint-adv exits non-zero
+          # on findings above the hidden level, which fails the job.
+          xargs -r oelint-adv <<< "${{ steps.changed.outputs.files }}"
+
+  build-machine:
+    name: build kiss-image (${{ matrix.machine }})
+    needs: lint
+    # Run after lint passes. On push to main, lint is skipped (PR-only),
+    # so allow `skipped` to fall through. `failure` / `cancelled` block.
+    if: always() && (needs.lint.result == 'success' || needs.lint.result == 'skipped')
+    runs-on: [self-hosted, yocto-build]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - machine: dogbonedark
+            build_dir: build
+            kas_overlays: .config.yaml:.config.devcontainer.yaml
+          - machine: stompduck
+            build_dir: build-st
+            kas_overlays: .config.yaml:.config.devcontainer.yaml
+          - machine: freiheit93
+            build_dir: build-nxp
+            kas_overlays: .config.yaml:.config.devcontainer.yaml:.config.nxp.eula.yaml
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: kas checkout
+        env:
+          KAS_BUILD_DIR: ${{ matrix.build_dir }}
+          KAS_MACHINE: ${{ matrix.machine }}
+        run: kas checkout "${{ matrix.kas_overlays }}"
+
+      - name: bitbake kiss-image
+        run: |
+          set -e
+          source openembedded-core/oe-init-build-env "${{ matrix.build_dir }}"
+          bitbake kiss-image
+
+      - name: Clean workspace artifacts
+        if: always()
+        run: |
+          rm -rf bitbake openembedded-core meta-arm
+          rm -rf build build-st build-qemuarm build-nxp
+
+  test-qemuarm:
+    name: build + testimage (qemuarm)
+    needs: lint
+    if: always() && (needs.lint.result == 'success' || needs.lint.result == 'skipped')
+    runs-on: [self-hosted, yocto-build]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: kas checkout
+        env:
+          KAS_BUILD_DIR: build-qemuarm
+          KAS_MACHINE: qemuarm
+        run: kas checkout .config.yaml:.config.devcontainer.yaml
+
+      - name: bitbake kiss-image
+        run: |
+          set -e
+          source openembedded-core/oe-init-build-env build-qemuarm
+          bitbake kiss-image
+
+      - name: bitbake kiss-image-testing
+        run: |
+          set -e
+          source openembedded-core/oe-init-build-env build-qemuarm
+          bitbake kiss-image-testing
+
+      - name: bitbake kiss-image-testing -c testimage
+        id: testimage
+        run: |
+          set -e
+          source openembedded-core/oe-init-build-env build-qemuarm
+          bitbake kiss-image-testing -c testimage
+
+      - name: Upload testimage logs on failure
+        if: failure() && steps.testimage.conclusion == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: qemuarm-testimage-logs
+          path: build-qemuarm/tmp/log/oeqa/
+          if-no-files-found: ignore
+
+      - name: Clean workspace artifacts
+        if: always()
+        run: |
+          rm -rf bitbake openembedded-core meta-arm
+          rm -rf build build-st build-qemuarm build-nxp
