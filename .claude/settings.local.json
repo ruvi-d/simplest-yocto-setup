@@ -30,9 +30,6 @@
       "Bash(realpath:*)",
       "Bash(diff:*)",
       "Bash(oelint-adv:*)",
-      "Skill(update-config)",
-      "Skill(update-config:*)",
-      "Bash(python3 -c \"import json; d = json.load\\(open\\('/workspaces/simplest-yocto-setup/.claude/settings.local.json'\\)\\); allow = d['permissions']['allow']; print\\('Edit in list:', 'Edit' in allow\\); print\\('Write in list:', 'Write' in allow\\); print\\('Total entries:', len\\(allow\\)\\)\")",
       "Edit",
       "Write"
     ]
