@@ -16,3 +16,5 @@ services:
       # Mount shell history files
       - ${HOME}/.zsh_history:/home/yoctouser/.zsh_history
       - ${HOME}/.bash_history:/home/yoctouser/.bash_history
+      # Mount Claude meta data
+      - ${HOME}/.claude:/home/yoctouser/.claude

@@ -1,0 +1,101 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this repo is
+
+`simplest-yocto-setup` is a reference Yocto/OpenEmbedded build environment managed with [kas](https://kas.readthedocs.io/). It demonstrates a clean, minimal layer structure for a fictitious company ("KISS") building for three embedded boards.
+
+The repo owns only `meta-kiss/` and the kas config (`.config.yaml`). Everything else (`bitbake/`, `openembedded-core/`, `meta-arm/`) is fetched by kas and is git-ignored. Inside the devcontainer, `kas checkout` has already been run.
+
+## Build commands
+
+Each machine has a dedicated pre-configured build directory. Source `oe-init-build-env` with the correct build folder, then run `bitbake`.
+
+| Machine | Real board | Build folder |
+|---|---|---|
+| `dogbonedark` | BeagleBone Black | `build/` |
+| `stompduck` | STM32MP157A-DK1 | `build-st/` |
+| QEMU ARM | — | `build-qemuarm/` |
+| `freiheit93` | FRDM i.MX93 | `build-nxp/` |
+
+```bash
+# Initialize environment for a machine (run from repo root)
+source openembedded-core/oe-init-build-env build        # dogbonedark
+source openembedded-core/oe-init-build-env build-st     # stompduck
+source openembedded-core/oe-init-build-env build-qemuarm
+source openembedded-core/oe-init-build-env build-nxp   # freiheit93
+
+# Build the image
+bitbake kiss-image
+
+# Build a specific recipe
+bitbake <recipe-name>
+
+# Run in QEMU
+# `slirp` is required inside the devcontainer — /dev/net/tun is not
+# exposed, so the default TAP networking fails with
+# "TUN control device /dev/net/tun is unavailable".
+bitbake kiss-image && runqemu qemuarm slirp nographic
+```
+
+## Running runtime tests
+
+`kiss-image-testing.bb` extends `kiss-image.bb` with the OE testimage
+framework. It boots the image in QEMU and runs a small set of runtime
+sanity tests over SSH.
+
+```bash
+source openembedded-core/oe-init-build-env build-qemuarm
+bitbake kiss-image-testing
+bitbake kiss-image-testing -c testimage
+```
+
+The recipe sets `TEST_RUNQEMUPARAMS = "slirp"` for the same TUN reason
+above. Available test cases live under
+`openembedded-core/meta/lib/oeqa/runtime/cases/`; add module names to
+`TEST_SUITES` in the recipe to enable more.
+
+## Linting recipes
+
+After modifying any recipe (`.bb` / `.bbappend` / `.inc`) under `meta-kiss/`,
+run `oelint-adv` on the changed file and resolve every finding before
+considering the task done:
+
+```bash
+oelint-adv meta-kiss/path/to/recipe.bb
+```
+
+For each finding:
+
+- Prefer fixing the underlying issue (e.g. add the missing `LICENSE`
+  / `DESCRIPTION`, switch a hard `=` to `?=` in a `require`-d file to
+  avoid `oelint.var.override`, etc.).
+- If the finding is a deliberate, justified deviation (e.g.
+  `IMAGE_FEATURES += "debug-tweaks"` in the testimage recipe), suppress
+  it inline with a `# nooelint: <rule.id>` comment placed on the line
+  *immediately above* the offending line. Do not suppress findings just
+  to silence them — keep suppressions narrow and explained by nearby
+  comments.
+
+A clean `oelint-adv` run (no output, exit 0) is the bar for "done".
+
+## Architecture and layer structure
+
+`meta-kiss/` is the only custom layer. Its structure follows standard OE conventions:
+
+- **`conf/distro/kiss.conf`** — distro policy (features, name, version). All KISS devices share these distro features.
+- **`conf/machine/`** — one `.conf` per board, each `require`-ing `include/common.inc` plus tune/SoC includes from OE-Core. Machine configs wire up `virtual/kernel` and `virtual/bootloader` to the kiss-specific recipes.
+- **`recipes-kernel/linux/linux-kiss_*.bb`** — kernel recipe(s). Board-specific `defconfig` files and patches live in subdirectories named after the machine.
+- **`recipes-bsp/u-boot/u-boot-kiss_git.bb`** — U-Boot recipe. Board-specific configs/patches in subdirectories.
+- **`recipes-bsp/trusted-firmware-a/`** — `.bbappend` to configure TF-A (used by `stompduck` and `freiheit93`).
+- **`recipes-bsp/firmware-imx/`** — NXP proprietary firmware for `freiheit93`; EULA files live alongside the recipe.
+- **`recipes-core/images/kiss-image.bb`** — the only image recipe, installs `packagegroup-core-boot`, `dropbear`, and `sl`.
+- **`recipes-security/optee/`** — OP-TEE bbappend for `freiheit93`.
+- **`wic/`** — one `.wks.in` per machine defining the SD card partition layout.
+
+## Key design principles (from the project's intent)
+
+- Single layer (`meta-kiss`) for all machines — no unnecessary layer splits.
+- Avoid vendor BSP layers when mainline kernel/U-Boot support is sufficient; copy only the minimal necessary snippets.
+- kas manages all layer fetching; no manual cloning.

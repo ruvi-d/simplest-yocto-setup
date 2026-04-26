@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(source openembedded-core/oe-init-build-env:*)",
+      "Bash(. openembedded-core/oe-init-build-env:*)",
+      "Bash(bitbake:*)",
+      "Bash(bitbake-layers:*)",
+      "Bash(bitbake-getvar:*)",
+      "Bash(bitbake-diffsigs:*)",
+      "Bash(bitbake-dumpsig:*)",
+      "Bash(bitbake-whatchanged:*)",
+      "Bash(oe-pkgdata-util:*)",
+      "Bash(oe-depends-dot:*)",
+      "Bash(recipetool:*)",
+      "Bash(devtool:*)",
+      "Bash(runqemu:*)",
+      "Bash(kas:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(tail:*)",
+      "Bash(head:*)",
+      "Bash(wc:*)",
+      "Bash(file:*)",
+      "Bash(du:*)",
+      "Bash(df:*)",
+      "Bash(stat:*)",
+      "Bash(readlink:*)",
+      "Bash(realpath:*)",
+      "Bash(diff:*)",
+      "Bash(oelint-adv:*)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(python3 -c \"import json; d = json.load\\(open\\('/workspaces/simplest-yocto-setup/.claude/settings.local.json'\\)\\); allow = d['permissions']['allow']; print\\('Edit in list:', 'Edit' in allow\\); print\\('Write in list:', 'Write' in allow\\); print\\('Total entries:', len\\(allow\\)\\)\")",
+      "Edit",
+      "Write"
+    ]
+  }
+}

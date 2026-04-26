@@ -31,7 +31,8 @@
 				"plorefice.devicetree",
 				"moshfeu.diff-merge",
 				"ms-python.black-formatter",
-				"kweihmann.oelint-vscode"
+				"kweihmann.oelint-vscode",
+				"Anthropic.claude-code"
 			],
 			"settings": {
 				// Disable auto save to limit the times Bitbake plugin spins up
