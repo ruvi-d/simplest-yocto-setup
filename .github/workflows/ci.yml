@@ -1,4 +1,4 @@
-name: build
+name: ci
 
 on:
   pull_request:
@@ -7,8 +7,61 @@ on:
     branches: [main]
 
 jobs:
+  lint:
+    name: oelint-adv (changed recipes)
+    # Lint runs on pull requests only; on push to main the merge has
+    # already happened and downstream builds run unconditionally.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: List changed recipe files under meta-kiss/
+        id: changed
+        run: |
+          base="origin/${{ github.base_ref }}"
+          files=$(git diff --name-only --diff-filter=ACMR "$base"...HEAD -- \
+            'meta-kiss/**/*.bb' 'meta-kiss/**/*.bbappend' 'meta-kiss/**/*.inc')
+          if [ -z "$files" ]; then
+            echo "No recipe files changed under meta-kiss/."
+            echo "files=" >> "$GITHUB_OUTPUT"
+          else
+            echo "Changed recipes:"
+            printf '  %s\n' $files
+            {
+              echo 'files<<EOF'
+              echo "$files"
+              echo 'EOF'
+            } >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install oelint-adv
+        if: steps.changed.outputs.files != ''
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends pipx
+          pipx ensurepath
+          pipx install oelint-adv
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Run oelint-adv
+        if: steps.changed.outputs.files != ''
+        env:
+          OELINT_CONFIG: ${{ github.workspace }}/.oelint.cfg
+        run: |
+          # `.oelint.cfg` already sets `hide = info` and `quiet = True`,
+          # so any output is a warning or error. oelint-adv exits non-zero
+          # on findings above the hidden level, which fails the job.
+          xargs -r oelint-adv <<< "${{ steps.changed.outputs.files }}"
+
   build-machine:
     name: build kiss-image (${{ matrix.machine }})
+    needs: lint
+    # Run after lint passes. On push to main, lint is skipped (PR-only),
+    # so allow `skipped` to fall through. `failure` / `cancelled` block.
+    if: always() && (needs.lint.result == 'success' || needs.lint.result == 'skipped')
     runs-on: [self-hosted, yocto-build]
     strategy:
       fail-fast: false
@@ -46,6 +99,8 @@ jobs:
 
   test-qemuarm:
     name: build + testimage (qemuarm)
+    needs: lint
+    if: always() && (needs.lint.result == 'success' || needs.lint.result == 'skipped')
     runs-on: [self-hosted, yocto-build]
     steps:
       - uses: actions/checkout@v4
