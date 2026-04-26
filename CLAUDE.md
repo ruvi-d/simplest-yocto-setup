@@ -33,8 +33,28 @@ bitbake kiss-image
 bitbake <recipe-name>
 
 # Run in QEMU
-bitbake kiss-image && runqemu qemuarm nographic
+# `slirp` is required inside the devcontainer — /dev/net/tun is not
+# exposed, so the default TAP networking fails with
+# "TUN control device /dev/net/tun is unavailable".
+bitbake kiss-image && runqemu qemuarm slirp nographic
 ```
+
+## Running runtime tests
+
+`kiss-image-testing.bb` extends `kiss-image.bb` with the OE testimage
+framework. It boots the image in QEMU and runs a small set of runtime
+sanity tests over SSH.
+
+```bash
+source openembedded-core/oe-init-build-env build-qemuarm
+bitbake kiss-image-testing
+bitbake kiss-image-testing -c testimage
+```
+
+The recipe sets `TEST_RUNQEMUPARAMS = "slirp"` for the same TUN reason
+above. Available test cases live under
+`openembedded-core/meta/lib/oeqa/runtime/cases/`; add module names to
+`TEST_SUITES` in the recipe to enable more.
 
 ## Architecture and layer structure
 
