@@ -72,6 +72,10 @@
 					{
 						"name": "qemuarm",
 						"pathToBuildFolder": "${workspaceFolder}/build-qemuarm"
+					},
+					{
+						"name": "freiheit93",
+						"pathToBuildFolder": "${workspaceFolder}/build-nxp"
 					}
 				],
 				"bitbake.pathToEnvScript": "${workspaceFolder}/openembedded-core/oe-init-build-env",
