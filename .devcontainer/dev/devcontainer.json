@@ -40,7 +40,14 @@
 				// Enable format on manual save. This is format known types like .py files
 				"editor.formatOnSave": true,
 				"files.watcherExclude": {
-					"**/build*": true
+					"**/build*": true,
+					"**/bitbake/**": true,
+					"**/openembedded-core/**": true,
+					"**/meta-arm/**": true,
+					"**/.git/objects/**": true,
+					"**/.git/subtree-cache/**": true,
+					"**/.git/refs/**": true,
+					"**/.git/logs/**": true
 				},
 				"search.exclude": {
 					"**/build*": true
