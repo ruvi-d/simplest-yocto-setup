@@ -1,0 +1,30 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+/*
+ * Out-of-source device tree for the Stomp Goose (stm32mp157a) board.
+ *
+ * Functionally a copy of arch/arm/boot/dts/st/stm32mp157a-dk1.dts
+ * shipped from meta-kiss instead of from the upstream kernel tree, with
+ * the model string altered so it is easy to verify at runtime (via
+ * /proc/device-tree/model or `cat /sys/firmware/devicetree/base/model`)
+ * that this DTS is the one in use.
+ */
+
+/dts-v1/;
+
+#include "stm32mp157.dtsi"
+#include "stm32mp15-pinctrl.dtsi"
+#include "stm32mp15xxac-pinctrl.dtsi"
+#include "stm32mp15xx-dkx.dtsi"
+
+/ {
+	model = "KISS Stompgoose (out-of-source DTS)";
+	compatible = "st,stm32mp157a-dk1", "st,stm32mp157";
+
+	aliases {
+		ethernet0 = &ethernet0;
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+};

@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
+/*
+ * U-Boot-specific overlay auto-included by U-Boot's
+ * scripts/Makefile.lib for the stompgoose device tree.
+ *
+ * U-Boot's binman/SPL/DDR config for the stm32mp157a-dk1 family lives
+ * in stm32mp157a-dk1-u-boot.dtsi (which itself pulls in
+ * stm32mp15-u-boot.dtsi). The stompgoose board is electrically
+ * identical to the dk1, so we just re-use that overlay verbatim.
+ */
+#include "stm32mp157a-dk1-u-boot.dtsi"
