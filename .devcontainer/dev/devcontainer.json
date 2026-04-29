@@ -71,6 +71,10 @@
 						"pathToBuildFolder": "${workspaceFolder}/build-st"
 					},
 					{
+						"name": "stompgoose",
+						"pathToBuildFolder": "${workspaceFolder}/build-st-custom"
+					},
+					{
 						"name": "qemuarm",
 						"pathToBuildFolder": "${workspaceFolder}/build-qemuarm"
 					},
