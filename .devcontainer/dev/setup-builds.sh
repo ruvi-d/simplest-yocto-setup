@@ -4,6 +4,8 @@ set -e
 # Create build folders sequentially
 KAS_BUILD_DIR=build KAS_MACHINE=dogbonedark kas checkout .config.yaml:.config.devcontainer.yaml
 
+KAS_BUILD_DIR=build-custom KAS_MACHINE=dogbonedarker kas checkout .config.yaml:.config.devcontainer.yaml
+
 KAS_BUILD_DIR=build-st KAS_MACHINE=stompduck kas checkout .config.yaml:.config.devcontainer.yaml
 
 KAS_BUILD_DIR=build-qemuarm KAS_MACHINE=qemuarm kas checkout .config.yaml:.config.devcontainer.yaml

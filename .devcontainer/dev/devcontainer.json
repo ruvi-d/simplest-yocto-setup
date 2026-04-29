@@ -67,6 +67,10 @@
 						"pathToBuildFolder": "${workspaceFolder}/build"
 					},
 					{
+						"name": "dogbonedarker",
+						"pathToBuildFolder": "${workspaceFolder}/build-custom"
+					},
+					{
 						"name": "stompduck",
 						"pathToBuildFolder": "${workspaceFolder}/build-st"
 					},
