@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+/*
+ * Out-of-source TF-A device tree for the KISS Stompgoose board.
+ *
+ * Hardware-equivalent to the upstream STM32MP157A-DK1; the only
+ * change versus stm32mp157a-dk1.dts is the model string, which lets
+ * us verify the out-of-source DTS was actually consumed by the TF-A
+ * build (look for it in the BL2 firmware DTB).
+ */
+
+/dts-v1/;
+
+#include "stm32mp157.dtsi"
+#include "stm32mp15-pinctrl.dtsi"
+#include "stm32mp15xxac-pinctrl.dtsi"
+#include "stm32mp15xx-dkx.dtsi"
+
+/ {
+	model = "KISS Stompgoose (out-of-source TF-A DTS)";
+	compatible = "st,stm32mp157a-dk1", "st,stm32mp157";
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+};
