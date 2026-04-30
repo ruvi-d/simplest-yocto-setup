@@ -31,6 +31,17 @@ SRC_URI:append:stm32mp1 = " \
     file://0001-Revert-board-st-stm32mp1-Clean-env_get_location.patch \
 "
 
+# dogbonedarker ships its U-Boot defconfig and device tree
+# out-of-source, from this layer. Both files are dropped directly into
+# the U-Boot source tree at unpack time via SRC_URI's subdir= parameter.
+# We still need to append our dtb to dtb-y in arch/arm/dts/Makefile,
+# because U-Boot's dts/Makefile builds the DTB via `make dtbs` rather
+# than the kbuild %.dtb pattern rule.
+SRC_URI:append:dogbonedarker = " \
+    file://dogbonedarker_defconfig;subdir=git/configs \
+    file://am335x-dogbonedarker.dts;subdir=git/arch/arm/dts \
+"
+
 # Patches to add support for FRDM i.MX93 board, not released yet.
 SRC_URI:append:freiheit93 = " \
     file://0001-imx93_frdm-Add-initial-board-support.patch \
@@ -43,6 +54,12 @@ SRC_URI:append:freiheit93 = " \
 SRCREV = "e37de002fac3895e8d0b60ae2015e17bb33e2b5b"
 
 EXTRA_OEMAKE:append:freiheit93 = " BINMAN_INDIRS=${RECIPE_SYSROOT}/firmware"
+
+do_configure:prepend:dogbonedarker() {
+    if ! grep -q 'am335x-dogbonedarker.dtb' ${S}/arch/arm/dts/Makefile; then
+        echo 'dtb-$(CONFIG_AM33XX) += am335x-dogbonedarker.dtb' >> ${S}/arch/arm/dts/Makefile
+    fi
+}
 
 do_configure:append:freiheit93() {
     # Copy tfa, tee and ele firmware binaries in build directory, so they can be found by mkimage
