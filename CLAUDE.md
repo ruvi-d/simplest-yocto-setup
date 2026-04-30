@@ -18,6 +18,8 @@ Each machine has a dedicated pre-configured build directory. Source `oe-init-bui
 | `stompduck` | STM32MP157A-DK1 | `build-st/` |
 | QEMU ARM | — | `build-qemuarm/` |
 | `freiheit93` | FRDM i.MX93 | `build-nxp/` |
+| `dogbonedarker` | BeagleBone Black (out-of-source kernel/U-Boot defconfig + DT) | `build-custom/` |
+| `stompgoose` | STM32MP157A-DK1 (out-of-source kernel/U-Boot/TF-A/OP-TEE defconfig + DT) | `build-st-custom/` |
 
 ```bash
 # Initialize environment for a machine (run from repo root)
@@ -85,7 +87,7 @@ A clean `oelint-adv` run (no output, exit 0) is the bar for "done".
 `meta-kiss/` is the only custom layer. Its structure follows standard OE conventions:
 
 - **`conf/distro/kiss.conf`** — distro policy (features, name, version). All KISS devices share these distro features.
-- **`conf/machine/`** — one `.conf` per board, each `require`-ing `include/common.inc` plus tune/SoC includes from OE-Core. Machine configs wire up `virtual/kernel` and `virtual/bootloader` to the kiss-specific recipes.
+- **`conf/machine/`** — one `.conf` per board, each `require`-ing `include/common.inc` plus tune/SoC includes from OE-Core. Machine configs wire up `virtual/kernel` and `virtual/bootloader` to the kiss-specific recipes. `dogbonedarker.conf` and `stompgoose.conf` `require` their parents (`dogbonedark` / `stompduck`) and override only the bits needed to swap in out-of-source defconfigs and device trees shipped from this layer.
 - **`recipes-kernel/linux/linux-kiss_*.bb`** — kernel recipe(s). Board-specific `defconfig` files and patches live in subdirectories named after the machine.
 - **`recipes-bsp/u-boot/u-boot-kiss_git.bb`** — U-Boot recipe. Board-specific configs/patches in subdirectories.
 - **`recipes-bsp/trusted-firmware-a/`** — `.bbappend` to configure TF-A (used by `stompduck` and `freiheit93`).

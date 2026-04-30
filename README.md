@@ -79,8 +79,9 @@ that splitting it into multiple layers proves useful.
 
 ## Machines
 
-The meta-kiss layer contains two machine configurations, called
-**dogbonedark**, **stompduck** and **freiheit93**.
+The meta-kiss layer contains five machine configurations:
+**dogbonedark**, **stompduck**, **freiheit93**, **dogbonedarker** and
+**stompgoose**.
 
 The **dogbonedark** machine describes a fictitious product which in reality
 implements the [BeagleBone®
@@ -128,6 +129,14 @@ firmwares](https://git.yoctoproject.org/meta-freescale/tree/recipes-bsp/firmware
 
 As for the `stompduck` machine, we are relying on meta-arm to build the TF-A
 firmware.
+
+The **dogbonedarker** and **stompgoose** machines are variants of
+`dogbonedark` and `stompduck` respectively. They inherit everything from
+their parent and only override the kernel and U-Boot configuration to use
+out-of-source defconfigs and device trees shipped from `meta-kiss` itself,
+showing how to ship board-specific kernel/U-Boot configuration from the
+layer rather than relying on the in-tree ones. `stompgoose` additionally
+ships its own TF-A and OP-TEE device tree.
 
 Here we also showcase the handling of proprietary licenses that have to be
 accepted before building a component: the NXP firmwares require acceptance of
