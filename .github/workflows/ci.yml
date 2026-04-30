@@ -70,6 +70,9 @@ jobs:
           - machine: dogbonedark
             build_dir: build
             kas_overlays: .config.yaml:.config.devcontainer.yaml
+          - machine: dogbonedarker
+            build_dir: build-custom
+            kas_overlays: .config.yaml:.config.devcontainer.yaml
           - machine: stompduck
             build_dir: build-st
             kas_overlays: .config.yaml:.config.devcontainer.yaml
@@ -98,7 +101,7 @@ jobs:
         if: always()
         run: |
           rm -rf bitbake openembedded-core meta-arm
-          rm -rf build build-st build-st-custom build-qemuarm build-nxp
+          rm -rf build build-custom build-st build-st-custom build-qemuarm build-nxp
 
   test-qemuarm:
     name: build + testimage (qemuarm)
@@ -145,4 +148,4 @@ jobs:
         if: always()
         run: |
           rm -rf bitbake openembedded-core meta-arm
-          rm -rf build build-st build-st-custom build-qemuarm build-nxp
+          rm -rf build build-custom build-st build-st-custom build-qemuarm build-nxp

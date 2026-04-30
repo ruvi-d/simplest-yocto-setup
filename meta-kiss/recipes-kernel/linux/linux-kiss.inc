@@ -20,9 +20,10 @@ S = "${WORKDIR}/linux-${PV}"
 # trimming the kernel and modules size disabling unneeded ones.
 SRC_URI += "file://defconfig"
 
-# stompgoose demonstrate out-of-source device trees:
-# the .dts file lives in this layer and is dropped directly into the
-# kernel source tree at unpack time via SRC_URI's subdir= parameter.
-# The kbuild pattern rule for %.dtb compiles it from there, so no
-# Makefile patching is needed.
+# dogbonedarker and stompgoose demonstrates an out-of-source device tree: the .dts
+# file lives in this layer and is dropped directly into the kernel
+# source tree at unpack time via SRC_URI's subdir= parameter. The
+# kbuild pattern rule for %.dtb compiles it from there, so no Makefile
+# patching is needed.
+SRC_URI:append:dogbonedarker = " file://am335x-dogbonedarker.dts;subdir=linux-${PV}/arch/arm/boot/dts/ti/omap"
 SRC_URI:append:stompgoose = " file://stm32mp157a-stompgoose.dts;subdir=linux-${PV}/arch/arm/boot/dts/st"
