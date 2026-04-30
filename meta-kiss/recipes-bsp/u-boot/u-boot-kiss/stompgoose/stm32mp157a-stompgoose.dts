@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+/*
+ * Copyright (C) STMicroelectronics 2019 - All Rights Reserved
+ *
+ * Out-of-source U-Boot device tree for the Stomp Goose board.
+ * Based on stm32mp157a-dk1.dts; the model string is altered so it can
+ * be inspected at the U-Boot prompt with `fdt print / model` to confirm
+ * the out-of-source DTS was used.
+ */
+
+/dts-v1/;
+
+#include "stm32mp157.dtsi"
+#include "stm32mp15-pinctrl.dtsi"
+#include "stm32mp15xxac-pinctrl.dtsi"
+#include "stm32mp15xx-dkx.dtsi"
+
+/ {
+	model = "KISS Stompgoose (out-of-source U-Boot DTS)";
+	compatible = "st,stm32mp157a-dk1", "st,stm32mp157";
+
+	aliases {
+		ethernet0 = &ethernet0;
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+};

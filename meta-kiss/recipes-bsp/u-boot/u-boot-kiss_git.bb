@@ -42,6 +42,20 @@ SRC_URI:append:dogbonedarker = " \
     file://am335x-dogbonedarker.dts;subdir=git/arch/arm/dts \
 "
 
+# stompgoose also ships its U-Boot defconfig and device tree
+# out-of-source. The DTS goes into dts/upstream/src/arm/st/ because
+# stm32mp15_defconfig sets CONFIG_OF_UPSTREAM_BUILD_VENDOR=y and
+# CONFIG_OF_UPSTREAM_VENDOR="st"; scripts/Makefile.dts wildcards every
+# *.dts under that directory into dtb-y, so no Makefile patching is
+# needed. The companion -u-boot.dtsi lives under arch/arm/dts/, where
+# scripts/Makefile.lib's u_boot_dtsi_loc auto-include logic will pick
+# it up by basename and merge in the binman/SPL/DDR config.
+SRC_URI:append:stompgoose = " \
+    file://stompgoose_defconfig;subdir=git/configs \
+    file://stm32mp157a-stompgoose.dts;subdir=git/dts/upstream/src/arm/st \
+    file://stm32mp157a-stompgoose-u-boot.dtsi;subdir=git/arch/arm/dts \
+"
+
 # Patches to add support for FRDM i.MX93 board, not released yet.
 SRC_URI:append:freiheit93 = " \
     file://0001-imx93_frdm-Add-initial-board-support.patch \
